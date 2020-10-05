@@ -1,0 +1,7 @@
+{
+  "name": "hoodwork-app",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

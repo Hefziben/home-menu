@@ -1,0 +1,381 @@
+<ion-header style="background: var(--ion-color-primary);" class="ion-no-border" [translucent]="true">
+  <ion-toolbar color="primary" >
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 20px 15px;
+      "
+    >
+      <img style="width: 85px;height: 59px;object-fit: contain;" src="../../assets/images/logo.png" alt="" />
+      <ion-buttons slot="end">
+        <ion-menu-button style="width: 50px;color: black;"></ion-menu-button>
+      </ion-buttons>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content  [scrollEvents]="true" style="--background: white;"  #content> 
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+   <ion-fab-button href="https://wa.me/50761234490?text=Hello%20World" color="success" >
+    <ion-icon name="logo-whatsapp"></ion-icon>
+   </ion-fab-button>
+  </ion-fab>
+  <ion-card style="margin: 0;display: flex;flex-direction: column;align-items:center;justify-content: center;background-color: #F3F7F5;box-shadow: none;">
+    
+    <ion-card-content style="color: white;display: flex;flex-direction: column;align-items: center;padding-bottom: 0"> 
+      <ion-card-header style="padding: 0;">
+        <img src="../../assets/images/Group 49.svg" >
+      <ion-card-title  style="text-align: start;font-size: 24px;font-weight: 600;text-transform: none;color: black;font-family: 'Noto Sans', sans-serif;"><span style="color:var(--ion-color-success)">Hoodwork</span>  is the local coworking space in your neighborhood.</ion-card-title>
+      <ion-card-subtitle style="text-align: start;font-size: 14px;text-transform: none;color: black;font-family: 'Noto Sans', sans-serif;font-weight: 100;margin-top: 10px;">Cut the commute forever by working from your local Hoodwork</ion-card-subtitle>
+    </ion-card-header>
+    </ion-card-content>
+  </ion-card>
+  <ion-item id="vision" style="--background: white;margin: 5px 0px;" lines="none">
+    <ion-label style="font-weight: 600;color: black;font-size: 24px;">Vision</ion-label>
+
+  </ion-item>
+  <video  width="100%" height="200" controls>
+    <source [src]="video" type="video/mp4">
+</video>
+  <ion-item style="--background: white;width: 100%;" lines="none">
+    <ion-label style="font-weight: 600;color: black;font-size: 24px;text-align: start;">Locations</ion-label>
+  </ion-item>
+  <div #map id="map"  style="height: 50%;"></div>
+  <ion-list style="padding: 0;margin:5px 15px;" *ngFor="let location of locationFilter | slice:0:3; let i = index">
+    <ion-item lines="none" style="--padding-start: 0;--inner-padding-end:0;--background: white;--border-color:lightgray;--border-width:0 0 0.2px 0;" *ngIf="i != active" (click)="changeMarker(location,i)">
+      <ion-row style="display: flex;justify-content: space-between;align-items: center;width: 100%;--inner-padding-end:0">      <ion-label style="white-space: normal;overflow: hidden;text-overflow: ellipsis;color: black;font-weight: 600;width: 90px;font-size: 14px;opacity: 1;">
+      {{location.name}}
+       </ion-label>        <ion-label style="color: gray;font-family: 'Noto Sans', sans-serif;font-size: 13px;white-space: normal;opacity: 1;">{{location.dist}} km</ion-label> 
+       <ion-button style="text-transform:none" color="dark" (click)="viewDetails(i)" expand="block" shape="round">
+        <ion-label style="font-size: 12px;padding: 1px;opacity: 1;" >Availability & pricing</ion-label>
+         
+       </ion-button>
+
+      </ion-row>
+
+ 
+    
+    </ion-item>
+    <ion-item lines="none" style="--padding-start: 0;--inner-padding-end:0;--border-color:lightgray;--border-width:0 0 0.2px 0; --background:white" *ngIf="i == active"  (click)="changeMarker(location,i)">
+      <ion-row style="display: flex;justify-content: space-between;align-items: center;width: 100%;">
+        <ion-label style="white-space: normal;overflow: hidden;text-overflow: ellipsis;color: var(--ion-color-success);font-weight: 600;width: 90px;font-size: 14px;opacity: 1;">
+          {{location.name}}
+         </ion-label> 
+         <ion-label style="color: var(--ion-color-success);font-family: 'Noto Sans', sans-serif;font-size: 13px;opacity: 1;">{{location.dist}} km</ion-label>  
+         <ion-button style="text-transform:none" color="dark" (click)="viewDetails(i)" expand="block" shape="round">
+          <ion-label style="font-size: 12px;padding: 1px;opacity: 1;" >Availability & pricing</ion-label>
+           
+         </ion-button>
+      </ion-row>
+    </ion-item>
+    
+  </ion-list>
+  <ion-item style="--background: white;" lines="none">
+    <ion-label style="font-weight: 600;color: black;font-size: 24px;margin-bottom: 15px;">Amenities</ion-label>
+  </ion-item>
+  <ngx-slick-carousel class="carousel" 
+  #slickModal="slick-carousel" 
+  [config]="slideConfig" 
+  (init)="slickInit($event)"
+  (afterChange)="afterChange($event)"
+  >
+  <div [class.selectedSlide]="selectedSpace == i" ngxSlickItem *ngFor="let slide of spacesArray;let i = index" class="slide">
+  <img style="object-fit: fill;" [src]="slide.image" >
+  <ion-item lines="none">
+    <ion-label style="text-align: center;font-weight: 500;white-space: pre-line;margin: 0;color: black;padding: 0 10px;font-weight: 600;">{{slide.title}} </ion-label>
+  </ion-item>
+  
+  </div>
+  </ngx-slick-carousel>
+  <div style="margin:15px;" *ngFor="let space of spacesArray;let i = index">
+    <ion-item *ngIf="selectedSpace == i"  style="--padding-start:0;--inner-padding-end:0;padding: 0 12%;" lines="none">
+      <ion-label class="image-desc" >{{space.desc}} </ion-label>
+    </ion-item> 
+  </div>
+  <ion-row
+    style="background: white; display: flex;justify-content: space-between;margin: 30px 15px;"
+  >
+    <ion-col
+      style="
+      height: 90px;margin-bottom: 15px;
+      background: var(--ion-color-primary);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: 13px;
+        align-items: center;
+      "
+      size="5.7"
+      *ngFor="let item of amanities"
+    >
+      <img
+        style="
+        opacity: 1;
+          object-fit: contain;
+          width: 55px;
+          height: 55px;
+          padding: 4px;
+          border-radius: 0px;
+        "
+        [src]="item.icon"
+      />
+      <ion-label style="text-align: center; color: black; font-size: 14px;opacity: 1;"
+        >{{item.name}}
+      </ion-label>
+    </ion-col>
+  </ion-row>
+  <ion-item style="--background: white;" lines="none">
+    <ion-label style="font-weight: 600;color: black;font-size: 24px;margin-bottom: 15px;">Benefits</ion-label>
+  </ion-item>
+<ion-card class="benefits" id="professionals"  >
+  <ion-card-header style="padding: 0;margin-bottom: 7px;">
+    <ion-card-title style="color: black;font-size: 16px;text-align: center;padding-top: 10px;font-weight: 600;">For Professionals</ion-card-title>
+    <img src="../../assets/images/profesionals .svg" alt="">
+    <ion-row style="justify-content: center;">
+      <ion-fab-button *ngIf="!profesionalsInfo"  style="width: 42px;height: 42px;--box-shadow:none;" (click)="showInfo('profesionals')">
+      <img src="../../assets/images/chevron-down-outline.svg" style="width: 25px;">
+          </ion-fab-button>
+
+    </ion-row>
+  </ion-card-header>
+
+  <ion-card-content  style="background-color: #F3F7F5;padding: 0;margin-bottom: 5px;" *ngIf="profesionalsInfo">
+  <ion-row style="padding: 0;">
+      <ion-col style="background: #F3F7F5;" size="12">
+      
+          <ion-label class="benefits-content" >Hoodwork lets you get back to work without the commute.
+          </ion-label>         
+      </ion-col>
+      <ion-col style="background: #F3F7F5;" size="12">
+      
+        <ion-label class="benefits-content">
+          Need to hold a 2 hour client pitch over Zoom? Deliver it from a soundproof videoconferencing suite that makes you look and sound great.
+        </ion-label>         
+    </ion-col> 
+    <ion-col style="background: #F3F7F5;" size="12">
+      
+      <ion-label class="benefits-content">
+        Work in peace and privacy from your local neighbourhood while staying in touch with your coworkers.
+      </ion-label>         
+  </ion-col> 
+    </ion-row>
+
+
+    <ion-row style="justify-content: center;">
+      <ion-fab-button *ngIf="profesionalsInfo"  style="width: 42px;height: 42px;--box-shadow:none;" (click)="showInfo('profesionals')">
+        <img src="../../assets/images/chevron-up-outline.svg" style="width: 25px;">
+            </ion-fab-button>
+      </ion-row>
+  </ion-card-content>
+  
+</ion-card>
+<ion-card  class="benefits" id="employers"  >
+  <ion-card-header style="padding: 0;margin-bottom: 7px;">
+    <ion-card-title style="color: black;font-size: 16px;text-align: center;padding-top: 11px;font-weight: 600;">For Employers</ion-card-title>
+    <img src="../../assets/images/job_interview.svg" alt="">
+    <ion-row style="justify-content: center;">
+      
+      <ion-fab-button  *ngIf="!employersInfo"  style="width: 42px;height: 42px;--box-shadow:none;" (click)="showInfo('employers')">
+        <img src="../../assets/images/chevron-down-outline.svg" style="width: 25px;">
+            </ion-fab-button>
+    </ion-row>
+  </ion-card-header>
+
+  <ion-card-content  style="background-color: #F3F7F5;padding: 0;margin:5px;" *ngIf="employersInfo">
+    <ion-row style="padding: 0;">
+      <ion-col style="background: #F3F7F5;" size="12">
+          <ion-label class="benefits-content">
+            Deliver a superior employee experience by giving your people the choice to work from anywhere in the city when they don’t need to be in the office.
+          </ion-label>         
+      </ion-col>
+      <ion-col style="background: #F3F7F5;" size="12">
+              <ion-label class="benefits-content">
+                     Discover new talent segments and care for your employees’ mental and physical health while saving time and reducing fixed real estate—permanently.
+        </ion-label>         
+    </ion-col>
+          
+     </ion-row>
+    <ion-row style="justify-content: center;">
+       <ion-fab-button *ngIf="employersInfo"  style="width: 42px;height: 42px;--box-shadow:none;" (click)="showInfo('employers')">
+        <img src="../../assets/images/chevron-up-outline.svg" style="width: 25px;">
+            </ion-fab-button>
+    </ion-row>
+  </ion-card-content>
+  
+</ion-card>
+<ion-card  class="benefits" id="landlords"  >
+  <ion-card-header style="padding: 0;margin-bottom: 7px;">
+    <ion-card-title style="color: black;font-size: 16px;text-align: center;padding-top: 10px;font-weight: 600;">For Landlords</ion-card-title>
+    <img src="../../assets/images/city_buildings.svg" alt="">
+    <ion-row style="justify-content: center;">
+      
+      <ion-fab-button *ngIf="!landlordsInfo"  style="width: 42px;height: 42px;--box-shadow:none;" (click)="showInfo('landlords')">
+        <img src="../../assets/images/chevron-down-outline.svg" style="width: 25px;">
+            </ion-fab-button>
+    </ion-row>
+  </ion-card-header>
+
+  <ion-card-content  style="background-color: #F3F7F5;padding: 0;margin:5px;" *ngIf="landlordsInfo">
+    <ion-row style="padding: 0;">
+      <ion-col style="background: #F3F7F5;" size="12">
+      
+          <ion-label class="benefits-content">Coworking spaces have proven to increate property values and community activity. 
+
+          </ion-label>         
+      </ion-col>
+      <ion-col style="background: #F3F7F5;" size="12">
+           
+         <ion-label class="benefits-content">Hoodwork generates high quality demand for your asset by attracting new, previously inaccessible tenant segments who live near your buildings. 
+ 
+        </ion-label>          
+    </ion-col>
+      <ion-col style="background: #F3F7F5;" size="12">
+        
+           <ion-label class="benefits-content">Enhance and expand your tenant mix and demand for local services including F&B and retail.
+          </ion-label>          
+      </ion-col>
+    </ion-row>
+    <ion-row style="justify-content: center;">
+       <ion-fab-button  *ngIf="landlordsInfo"  style="width: 42px;height: 42px;--box-shadow:none;" (click)="showInfo('landlords')">
+        <img src="../../assets/images/chevron-up-outline.svg" style="width: 25px;">
+            </ion-fab-button>
+    </ion-row>
+  </ion-card-content>
+  
+</ion-card>
+<ion-card  class="benefits" id="developers">
+  <ion-card-header style="padding: 0;margin-bottom: 7px;">
+    <ion-card-title style="color: black;font-size: 16px;text-align: center;padding-top: 10px;font-weight: 600;">For Developers</ion-card-title>
+    <img src="../../assets/images/city_buildings.svg" alt="">
+    <ion-row style="justify-content: center;">
+      
+      <ion-fab-button *ngIf="!developersInfo"  style="width: 42px;height: 42px;--box-shadow:none;" (click)="showInfo('developers')">
+        <img src="../../assets/images/chevron-down-outline.svg" style="width: 25px;">
+            </ion-fab-button>
+    </ion-row>
+  </ion-card-header>
+
+  <ion-card-content  style="background-color: #F3F7F5;padding: 0;margin:5px;" *ngIf="developersInfo">
+    <ion-row style="padding: 0;">
+      
+      <ion-col style="background: #F3F7F5;" size="12">
+      
+          <ion-label class="benefits-content">High quality developments of tomorrow will feature integrated coworking spaces for condo owners and tenants, allowing professionals to choose to work from home without using residential space.
+          </ion-label>         
+      </ion-col>
+      <ion-col style="background: #F3F7F5;" size="12">
+           
+        <ion-label class="benefits-content">Hoodwork can help designs and operate your captive coworking space which will future-proof your development and generate demand for your properties from professional and corporate segments</ion-label>          
+   </ion-col>
+     
+   
+    </ion-row>
+
+    <ion-row style="justify-content: center;">
+       <ion-fab-button  *ngIf="developersInfo"  style="width: 42px;height: 42px;--box-shadow:none;" (click)="showInfo('developers')">
+        <img src="../../assets/images/chevron-up-outline.svg" style="width: 25px;">
+            </ion-fab-button>
+    </ion-row>
+  </ion-card-content>
+  
+</ion-card>
+<ion-item style="--background: white;" lines="none">
+  <ion-label style="font-weight: 600;color: black;font-size: 24px;margin-bottom: 15px;">From our Blog</ion-label>
+</ion-item>
+<ngx-slick-carousel class="carousel" 
+#slickModal="slick-carousel" 
+[config]="slideConfig" 
+(afterChange)="blogChange($event)"
+>
+<div (click)="goToBlog(slide.title)" [class.selectedSlide]="selectedArticle == i" ngxSlickItem *ngFor="let slide of articlesArray;let i = index" class="slide">
+<img style="object-fit: fill;" [src]="slide.image" >
+<ion-item style="--padding-start:0;--inner-padding-end:0" lines="none">
+  <ion-label style="text-align: start;font-weight: 500;white-space: pre-line;margin: 0;color: black;padding: 0 10px;font-weight: 600;">{{slide.title}} </ion-label>
+</ion-item>
+<ion-item style="--padding-start:0;--inner-padding-end:0;padding: 0 10px;" lines="none">
+  <ion-label style="text-align: start;" class="image-desc">{{slide.desc}} <span  style="color: var(--ion-color-success);">read more ...</span> </ion-label>
+</ion-item>
+
+</div>
+</ngx-slick-carousel>
+<ion-button (click)="top()"
+style=" width: 100%; height: 45px;margin:0;--border-radius:0;text-transform: none;"
+expand="block"
+color="success"
+fill="clear"
+>
+Back to the top ↑
+</ion-button>
+<ion-row style="background: #202020;padding: 15px;">
+  <ion-col size="6">
+    <ion-label class="footer" >Vision</ion-label>
+  </ion-col>
+  <ion-col size="6">
+    <ion-label class="footer">Locations</ion-label>
+  </ion-col>
+  <ion-col size="6">
+    <ion-label class="footer">Solutions</ion-label>
+  </ion-col>
+  <ion-col size="6">
+    <ion-label class="footer">Blog</ion-label>
+  </ion-col>
+  <ion-col size="6">
+    <ion-label class="footer">Products</ion-label>
+  </ion-col>
+  <ion-col size="6">
+    <ion-label class="footer">Contact us</ion-label>
+  </ion-col>
+</ion-row>
+<ion-row>
+<ion-icon slot="start" name="add"></ion-icon>
+</ion-row>
+<ion-row style="background: rgb(32, 32, 32);" class="ion-align-items-center">
+  <ion-fab-button style="--background: #202020;--box-shadow:none;">
+    <ion-icon style="font-size: 40px;" name="logo-facebook"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-button style="--color:#202020;--background: white;--box-shadow:none;font-size: 25px;width: 36px;height: 36px;margin-right: 12px;" >
+    <ion-icon style="font: size 25px;" name="logo-twitter"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-button style="--box-shadow:none;font-size: 20px;--color:#202020;--background: white;width: 36px;height: 36px;margin-right: 12px;" >
+    <ion-icon name="logo-instagram"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-button style="--color:#202020;--background: white;--box-shadow:none;font-size: 25px;width: 36px;height: 36px;margin-right: 12px;" >
+    <ion-icon name="share-social"></ion-icon>
+  </ion-fab-button>
+</ion-row>
+<ion-row style="background:#202020;display: flex;justify-content: flex-start;padding: 15px;">
+  <ion-label style="color: #FFFFFF;font-size: 10px;">Copyright © 2020 Hoodwork Pte Ltd All rights reserved.</ion-label> 
+</ion-row>
+  
+</ion-content>
+<ion-footer>
+  <!-- <ion-button style="--background: white;margin: 0;--border-radius: 0;text-transform: none;--box-shadow: none;"  (click)="add_to_home($event)" expand="block">
+    <div>
+      <img style="width: 30px;" src="../../assets/icons/icon-144x144.png" alt="">
+      <ion-label style="font-size: 12px;color:var(--ion-color-success)">Add Hoodwork to Home screen</ion-label>
+    </div>
+
+  </ion-button> -->
+  <ion-item *ngIf="showBtn" style="--padding-start:0;--inner-padding-end:0">
+    <div style="display: flex;justify-content: space-between;width: 100%;">
+      <div (click)="add_to_home($event)" style="display: flex;align-items: center;margin: 5px;">
+        <img style="width: 30px;margin-right: 5px;" src="../../assets/icons/icon-144x144.png" alt="">
+        <ion-label style="font-size: 14px;color:var(--ion-color-success)">Add Hoodwork to Home screen</ion-label>
+      </div>
+      <ion-button fill="clear" (click)="close()">
+        <ion-icon color="dark" slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </div>
+
+  </ion-item>
+  <ion-button
+  style="font-weight: 600; width: 100%; height: 55px;margin: 0;--border-radius:0"
+  expand="block"
+  color="success"
+  (click)="reserve('Professional')"
+  >
+  GET IN TOUCH
+  </ion-button>
+</ion-footer>

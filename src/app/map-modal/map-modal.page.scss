@@ -1,0 +1,140 @@
+#map {
+    width: 100%;
+  }
+   
+ 
+
+  .close-fake {
+    --background: transparent;
+    ion-icon {
+        font-size: 25px;
+    }
+
+}
+
+ion-fab[top][edge] {
+    top: 0px;
+    .fab {
+        background-color: rgba(29, 29, 29, 0.5) !important;
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.gmnoprint{
+    display: none;
+}
+
+ion-item{
+width: 100%;
+  margin: 0;
+  padding:0;
+
+}
+
+ion-searchbar ion-icon {
+ color: red;
+}
+
+ion-content{
+  --background: #F3F7F5 ;
+}
+
+.steps{
+  margin: 5px;
+  font-size: 14px;
+  color: black;
+}
+
+.custom-card-deck {
+  margin: 1em 0;
+}
+
+.custom-card-deck .mbsc-lv-sl-c {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.custom-card-deck .mbsc-lv-v {
+  padding-top: 88%;
+  min-height: 390px;
+}
+
+.custom-card-deck .mbsc-lv-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.custom-card-deck .mbsc-lv-item.mbsc-lv-item-swiping {
+  z-index: 10;
+}
+
+.custom-card-deck .custom-card-rotate-right {
+  transform: rotate(1deg);
+}
+
+.custom-card-deck .custom-card-rotate-left {
+  transform: rotate(-2deg);
+}
+
+.custom-card-deck .mbsc-card.custom-card {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+}
+
+.ios{
+  ion-segment-button.selected {
+    background: white;
+    --color-checked:var(--ion-color-success);
+      // border: solid 1px var(--ion-color-success);
+        ion-label{
+        color: var(--ion-color-success);
+       }
+   
+  }
+}
+.ios{
+  ion-segment-button{
+    background: white;
+  }
+  ion-segment-button::before{
+    border: none;
+  }
+}
+
+.homes{
+ height: 200px; 
+}
+ion-segment-button.selected {  
+  --color-checked:var(--ion-color-success);
+  //background: var(--ion-color-secondary);
+  ion-label{
+   color: var(--ion-color-success);
+  }
+
+}
+
+
+.segments{
+  background: white;
+}
+.amenities{
+  border: solid grey 1px;
+    border-radius: 15px;
+    padding: 5px;
+}
+
+.footer{
+  color:white
+}
+
+#mainBody {
+  float:right;
+  width:770px;
+  padding:0px 5px 0px 5px;
+}
+
+.social{
+  border: solid red;
+}

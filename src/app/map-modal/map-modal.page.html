@@ -1,0 +1,645 @@
+<ion-header style="background: white" class="ion-no-border" [translucent]="true">
+  <ion-toolbar style="--background: var(--ion-color-primary)">
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 20px 15px;
+      "
+    >
+      <img style="width: 85px;height: 59px;object-fit: contain;" src="../../assets/images/logo.png" alt="" />
+      <ion-buttons *ngIf="!page" slot="end">
+        <ion-menu-button  style="width: 50px;color: black;" ></ion-menu-button>
+      </ion-buttons>
+
+    </div>
+    <ion-buttons *ngIf="page" style="margin-right: 10px;" slot="end">
+      <ion-back-button icon="arrow-forward" text="" color="dark" defaultHref="home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content id="start" [scrollEvents]="true" style="--background: white" #content>
+    <!-- fab placed to the bottom end -->
+   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+   <ion-fab-button href="https://wa.me/50761234490?text=Hello%20World" color="success" >
+    <ion-icon name="logo-whatsapp"></ion-icon>
+   </ion-fab-button>
+  </ion-fab>
+
+  <ion-row style="padding: 15px;background: var(--ion-color-primary);">
+    <ion-label style="color: black; font-size: 24px; font-weight: 600"
+      >Welcome to <span style="color: var(--ion-color-success)">Hoodwork</span></ion-label
+    >
+    <ion-label *ngIf="latLngResult"
+      style="color: black; width: 300px; margin-top: 10px;font-size: 20px;font-weight: 600;">{{latLngResult}}</ion-label>
+  </ion-row>
+  <ion-row id="search">
+    <ion-col size="10">
+      <ion-item lines="none" style="--background: white">
+        <ion-input
+          [(ngModel)]="autocomplete.input"
+          (ionChange)="UpdateSearchResults()"
+          lines="none"
+          style="color: black;background: white;"
+          type="text"
+          placeholder="Search"
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col style="padding: 0" size="2">
+      <ion-item style="--background: white" lines="none">
+        <img src="../../assets/images/search.png">
+        </ion-item>
+    </ion-col>
+    <ion-col style="padding: 0" size="12">
+      <ion-list
+        style="background: white"
+        [hidden]="autocompleteItems.length == 0"
+      >
+        <ion-item
+          lines="none"
+          style="--background: white; color: black"
+          *ngFor="let item of autocompleteItems"
+          tappable
+          (click)="SelectSearchResult(item)"
+        >
+          {{ item.description }}
+        </ion-item>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+  <div #map id="map" style="height: 60%"></div>
+
+  <ion-row
+    *ngIf="locationFilter"
+    style="
+      display: flex;
+      justify-content: space-between;
+      margin: 15px;
+      align-items: center;
+    "
+  >
+    <ion-label style="font-size: 20px; font-weight: 600; color: black">
+      {{locationFilter[active].name}}
+    </ion-label>
+    <ion-label style="color: #929394; font-size: 14px; align-items: center"
+      >{{locationFilter[active].dist}} km</ion-label
+    >
+  </ion-row>
+  <ion-row
+  style="
+    display: flex;
+    justify-content: space-between;
+    margin: 15px;
+    align-items: center;
+  "
+>
+  <ion-col style="padding: 0;" size="12">
+    <ion-item
+      lines="none"
+      style="--background: white; --padding-start:0"
+    >
+      <ion-label style="font-weight: 500;color: grey;font-size: 18px;margin: 0;">
+        Available spaces
+      </ion-label>
+    </ion-item>
+    
+  </ion-col>
+  <ion-item *ngFor="let plan of plans"
+    lines="none"
+    style="--background: white; border-bottom: solid 1px lightgray;--padding-start:0;--inner-padding-end:0"
+  >
+    <div style="display: flex; flex-direction: column;width: 100%;">
+      <ion-col style="display: flex;justify-content: space-between;" size="12">
+        <ion-label style="color: #005420; font-weight: 600;width: 210px;white-space: normal;"
+          >{{plan.name}} </ion-label
+        >
+        <ion-label
+              style="color: black; font-size: 14px; font-weight: 600"
+              >SGD {{plan.price}}
+              <span style="font-size: 15px; font-weight: 100"
+                >/mo</span
+              ></ion-label
+            >
+      </ion-col>
+      <ion-row>
+        <ion-col size="8">
+          <ion-label
+            style="
+              color: black;
+              font-size: 14px;
+              width: 185px;
+              white-space: normal;
+              line-height: 1.8;
+            "
+            >{{plan.description}}
+            </ion-label
+          >
+        </ion-col>
+        <ion-col style="display: flex; flex-direction: column;justify-content: center;" size="4">
+            <ion-button class="join" color="dark" (click)="reserve(plan.id)" expand="block"  shape="round">
+              join
+            </ion-button>
+          
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-item>
+</ion-row>
+  <ion-item style="--background: white;" lines="none">
+    <ion-label style="font-weight: 500;color: grey;font-size: 18px;margin-bottom: 15px;">Nearby</ion-label>
+  </ion-item>
+  <ion-segment mode="md"
+style="background: white;margin-bottom: 10px;border: solid 0.1px lightgray;border-radius: 0;"
+    [(ngModel)]="segment"
+    (ionChange)="segmentChanged($event)"
+  >
+    <ion-segment-button style="margin: 0 1px;font-size: 18px;"
+      (click)="selectedValue(i)"
+      *ngFor="let segment of segments;let i = index"
+      [class.selected]="selectedIndex == i"
+      value="{{segment.name}}"
+    >
+      <ion-label style="text-transform: none" color="medium"
+        >{{segment.name}}</ion-label
+      >
+    </ion-segment-button>
+  </ion-segment>
+  <div #map2 [ngStyle]="{'height': mheight}" style="width: 100%;"></div>
+  <div  [ngSwitch]="segment">
+       <div style="background: white" *ngSwitchCase="'Homes'">
+      <div>
+        <div class="segments">
+          <div>
+            <ion-item
+              *ngFor="let item of nearCondos | slice:0:5;let i = index"
+              style="
+              margin: 0 0 0 5%;
+              --padding-start:0;
+              --padding-end:0;
+              /* border-bottom: solid lightgray 0.1px; */
+                --background: white;
+                width: 90%;
+                --border-color: lightgrey;
+                --inner-border-width: 0 0 0.5px 0;
+              "
+            >
+              <ion-row
+                *ngIf="i == property"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  width: 100%;
+                "
+              >
+                <ion-button
+                  style="
+                    --padding-start: 0;
+                    --padding-end: 0;
+                    min-width: 100%;
+                    margin: 0;
+                  "
+                  expand="block"
+                  fill="clear"
+                  (click)="view(i)"
+                >
+                  <ion-row
+                    style="
+                    min-height: 20px;
+                      width: 100%;
+                      display: flex;
+                      justify-content: space-between;
+                    "
+                  >
+                    <ion-label
+                      style="
+                      width: 105px;
+                      white-space: normal;
+                        font-size: 15px;
+                        color: #005420;
+                        font-weight: 600;
+                        text-transform: none;
+                        --padding-start: 0;
+                        text-align: initial
+                      "
+                      >{{item.name}}
+                    </ion-label>
+                    <ion-label
+                      style="
+                        color: #005420;
+                        font-size: 15px;
+                        display: flex;
+                        align-items: center;
+                        font-weight: 600;
+                        text-transform: none;
+                      "
+                    >
+                      {{item.distance}} km away
+                    </ion-label>
+                  </ion-row>
+                  <ion-fab-button *ngIf="!open"
+                  style="
+                    width: 25px;
+                    height: 25px;
+                    --box-shadow: none;
+                    margin-left: 5px;
+                   
+                  "
+                >
+                <ion-icon 
+                    style="font-size: 15px;color: #005420;"
+                                        name="chevron-down"
+                  ></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button *ngIf="open"
+                  style="
+                    width: 25px;
+                    height: 25px;
+                    --box-shadow: none;
+                    margin-left: 5px;
+
+                  "
+                >
+                  <ion-icon  style="font-size: 15px;color: #005420;"
+                   
+                    name="chevron-up"
+                  ></ion-icon>
+                </ion-fab-button>
+                </ion-button>
+                
+                
+
+              </ion-row>
+              <ion-row
+                *ngIf="i != property"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  width: 100%;
+                "
+              >
+              <ion-button
+              style="
+                --padding-start: 0;
+                --padding-end: 0;
+                min-width: 100%;
+                margin: 0;
+              "
+              expand="block"
+              fill="clear"
+              (click)="view(i)"
+            >
+              <ion-row
+                style="
+                min-height: 20px;
+                  width: 100%;
+                  display: flex;
+                  justify-content: space-between;
+                "
+              >
+                <ion-label
+                  style="
+                    width: 105px;
+                    text-align: initial;
+                    white-space: normal;
+                    font-size: 15px;
+                    color: black;
+                    text-transform: none;
+                    --padding-start: 0;
+                  "
+                  >{{item.name}}
+                </ion-label>
+                <ion-label
+                  style="
+                    color: black;
+                    font-size: 15px;
+                    display: flex;
+                    align-items: center;
+                     text-transform: none;
+                  "
+                >
+                  {{item.distance}} km away
+                </ion-label>
+              </ion-row>
+              <ion-fab-button
+              style="
+              --background: var(--ion-color-primary);
+                width: 25px;
+                height: 25px;
+                --box-shadow: none;
+                margin-left: 5px;
+              "
+            >
+              <ion-icon
+                style="font-size: 15px"
+                color="dark"
+                name="chevron-down"
+              ></ion-icon>
+            </ion-fab-button>
+            </ion-button>
+                <!-- <ion-button
+                  style="
+                    --padding-start: 0;
+                    --padding-end: 0;
+                    min-width: 90%;
+                    margin: 0;
+                  "
+                  expand="block"
+                  fill="clear"
+                  shape="round"
+                >
+                  <ion-row
+                    style="
+                    min-height: 20px;
+                      width: 100%;
+                      display: flex;
+                      justify-content: space-between;
+                    "
+                  >
+                    <ion-label
+                      style="
+                        color: black;
+                        font-size: 15px;
+                        color: black;
+                        font-weight: 500;
+                        text-transform: none;
+                        --padding-start: 0;
+                      "
+                      >{{item.name}}
+                    </ion-label>
+                    <ion-label
+                      style="
+                        color: #929394;
+                        font-size: 15px;
+                        display: flex;
+                        align-items: center;
+                        text-transform: none;
+                      "
+                    >
+                      {{item.distance}} km away
+                    </ion-label>
+                  </ion-row>
+                </ion-button>
+                <ion-fab-button
+                  (click)="view(i)"
+                  style="
+                    width: 25px;
+                    height: 25px;
+                    --box-shadow: none;
+                    margin-left: 5px;
+                  "
+                >
+                  <ion-icon
+                    style="font-size: 15px"
+                    color="dark"
+                    name="chevron-down"
+                  ></ion-icon>
+                </ion-fab-button> -->
+              </ion-row>
+            </ion-item>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="segments" *ngSwitchCase="'MRT'">
+              <ion-item
+          *ngFor="let item of mrtStations | slice:0:5;let i = index"
+          style="
+          margin: 0 0 0 5%;
+          /* border-bottom: solid lightgray 0.1px; */
+            --background: white;
+            width: 90%;
+            --border-color: lightgrey;
+            --padding-start:0;
+            --padding-end:0;
+            --inner-border-width: 0 0 0.5px 0;
+          "
+        >
+          <ion-row
+            style="display: flex; justify-content: space-between; width: 100%"
+          >
+                          <ion-row
+                style="
+                  width: 100%;
+                  display: flex;
+                  justify-content: space-between;
+                "
+              >
+              <ion-col style="display: flex;flex-direction: column;justify-content: center;--border-radius:0" size="6">
+                <ion-label
+                  style="
+                  text-align: start;
+                    color: black;
+                    font-size: 15px;
+                    color: black;
+                    font-weight: 500;
+                    text-transform: none;
+                    --padding-start: 0;
+                    white-space: normal;
+                  "
+                  >{{item.name}}
+                </ion-label>
+              </ion-col>
+              <ion-col style="display: flex;flex-direction: column;justify-content: center;" size="6">
+                <ion-label
+                style="
+                text-align: end;
+                  color: #929394;
+                  font-size: 15px;
+                  text-transform: none;
+                "
+              >
+                {{item.dist}} km away
+              </ion-label>
+              
+              </ion-col>
+                
+
+              </ion-row>
+
+          </ion-row>
+        </ion-item>
+      
+    </div>
+    <div class="segments" *ngSwitchCase="'Bus'">
+       <ion-item
+          *ngFor="let bus of busStations | slice:0:5;let i = index"
+          style="
+          margin: 0 0 0 5%;
+          /* border-bottom: solid lightgray 0.1px; */
+            --background: white;
+            width: 90%;
+            --border-color: lightgrey;
+            --inner-border-width: 0 0 0.5px 0;
+             --padding-start:0;
+            --padding-end:0;
+          "
+        >
+          <ion-row
+            style="display: flex; justify-content: space-between; width: 100%"
+          >
+                          <ion-row
+                style="
+                  width: 100%;
+                  display: flex;
+                  justify-content: center;
+                "
+              >
+              <ion-col style="display: flex;flex-direction: column;justify-content: center;--border-radius:0" size="6">
+                <ion-label
+                  style="
+                  text-align: start;
+                    color: black;
+                    font-size: 15px;
+                    color: black;
+                    font-weight: 500;
+                    text-transform: none;
+                    --padding-start: 0;
+                    white-space: normal;
+                  "
+                  >{{bus.name}}
+                </ion-label>
+              </ion-col>
+              <ion-col style="display: flex;flex-direction: column;justify-content: center;" size="6">
+                <ion-label
+                style="
+                text-align: end;
+                  color: #929394;
+                  font-size: 15px;
+                  text-transform: none;
+                "
+              >
+                {{bus.dist}} m away
+              </ion-label>
+              
+              </ion-col>
+                
+
+              </ion-row>
+
+          </ion-row>
+        </ion-item>
+      
+    </div>
+  </div >
+  <ion-row
+  style="
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 15px 0;
+    align-items: center;
+  "
+>
+  <ion-col style="margin: 15px 0;" size="12">
+    <ion-label style="font-weight: 500;color: grey;font-size: 22px">
+      Amenities
+    </ion-label>
+  </ion-col>
+  <ion-row
+    style="background: white; display: flex;justify-content: space-between;"
+  >
+    <ion-col
+      style="
+      height: 90px;margin-bottom: 15px;
+      background: var(--ion-color-primary);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: 13px;
+        align-items: center;
+      "
+      size="5.7"
+      *ngFor="let item of amanities"
+    >
+      <img
+        style="
+          object-fit: contain;
+          width: 55px;
+          height: 55px;
+          padding: 4px;
+          border-radius: 0px;
+        "
+        [src]="item.icon"
+      />
+      <ion-label style="text-align: center; color: black; font-size: 14px"
+        >{{item.name}}
+      </ion-label>
+    </ion-col>
+  </ion-row>
+</ion-row>
+
+
+<ion-button (click)="top()"
+style=" width: 100%; height: 45px;margin: 50px 0 0 0;--border-radius:0;text-transform: none;"
+expand="block"
+color="success"
+fill="clear"
+>
+Back to the top ↑
+</ion-button>
+
+<ion-row style="background: #202020;padding: 15px;">
+  <ion-col size="6">
+    <ion-label class="footer" >Vision</ion-label>
+  </ion-col>
+  <ion-col size="6">
+    <ion-label class="footer">Locations</ion-label>
+  </ion-col>
+  <ion-col size="6">
+    <ion-label class="footer">Solutions</ion-label>
+  </ion-col>
+  <ion-col size="6">
+    <ion-label class="footer">Blog</ion-label>
+  </ion-col>
+  <ion-col size="6">
+    <ion-label class="footer">Products</ion-label>
+  </ion-col>
+  <ion-col size="6">
+    <ion-label class="footer">Contact us</ion-label>
+  </ion-col>
+</ion-row>
+<ion-row>
+<ion-icon slot="start" name="add"></ion-icon>
+</ion-row>
+<ion-row style="background: rgb(32, 32, 32);" class="ion-align-items-center">
+  <ion-fab-button style="--background: #202020;--box-shadow:none;" (click)="ShareFacebook()">
+    <ion-icon style="font-size: 40px;" name="logo-facebook"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-button style="--color:#202020;--background: white;--box-shadow:none;font-size: 25px;width: 36px;height: 36px;margin-right: 12px;" (click)="ShareFacebook()">
+    <ion-icon style="font: size 25px;" name="logo-twitter"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-button style="--box-shadow:none;font-size: 20px;--color:#202020;--background: white;width: 36px;height: 36px;margin-right: 12px;" (click)="ShareFacebook()">
+    <ion-icon name="logo-instagram"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-button style="--color:#202020;--background: white;--box-shadow:none;font-size: 25px;width: 36px;height: 36px;margin-right: 12px;" (click)="Share()">
+    <ion-icon name="share-social"></ion-icon>
+  </ion-fab-button>
+</ion-row>
+<!-- <ion-row style="background: #202020;" class="ion-align-items-center">
+  <ion-col style="padding: 15px;" size="12">
+    <ion-label style="color: white;font-size: 14px;margin-left: 5px;">Subscribe to stay up to date!</ion-label>
+    <ion-item style="--border-width:0.5px;--border-color:lightgray;--background: #202020;">
+  <ion-input style="--placeholder-font-size:12px;--placeholder-font-style:italic;--placeholder-color:lightgray;color: white;" type="text" placeholder="Email address"></ion-input>
+  <ion-button style="--background: #202020;--box-shadow:none" (click)="subscribe()">
+    <ion-icon name="chevron-forward"></ion-icon>
+  </ion-button> 
+  </ion-item>
+  </ion-col>  
+</ion-row> -->
+<ion-row style="background:#202020;display: flex;justify-content: flex-start;padding: 15px;">
+  <ion-label style="color: #FFFFFF;font-size: 10px;">Copyright © 2020 Hoodwork Pte Ltd All rights reserved.</ion-label> 
+</ion-row>
+
+
+  <div id="btm"></div>
+</ion-content>
+<ion-footer>
+  <ion-button
+  style="font-weight: 600; width: 100%; height: 55px;margin: 0;--border-radius:0"
+  expand="block"
+  color="success"
+  (click)="reserveModal()"
+  >
+  GET IN TOUCH
+  </ion-button>
+</ion-footer>

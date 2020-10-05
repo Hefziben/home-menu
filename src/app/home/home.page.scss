@@ -1,0 +1,243 @@
+
+.swiper-container {
+    //width: 450px;
+    // height: 300px;
+    width: 600px;
+  }
+  
+  .swiper-slide {
+    
+    width: 200px;
+    // height: 115px;
+    // text-align: center;
+    // font-size: 18px;
+    // background: #fff;
+  
+    //  display: flex;
+    // justify-content: center;
+  
+    // align-items: center;
+  }
+  .input {
+      background-color: rgb(240, 240, 240);
+      border: 1px solid rgb(210, 210, 210);
+      border-radius: 9px;
+      font-size: .9em !important;
+  }
+  
+  #map_canvas {
+      width: 90%;
+      height: 80%;
+      border: 1px solid red;
+    }
+     
+     
+    #address {
+      padding: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+     
+    #map {
+      width: 100%;
+      .gm-style-iw-d{
+        overflow:hidden;  
+          }
+    }
+     
+    
+    .map-wrapper {
+      position: relative;
+      .gm-style-iw-d{
+        overflow:hidden;  
+          }
+     
+      #map_center {
+        position: absolute;
+        z-index: 99;
+        height: 40px;
+        width: 40px;
+        top: 50%;
+        left: 50%;
+        margin-left: -21px;
+        margin-top: -41px;
+      }
+    }
+  
+    #content {
+      padding: 10px;
+      border: solid red 1px;
+    }
+    .gm-style-iw {
+      border: solid red 1px;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+    }
+    .gm-style-iw > div {
+      overflow: visible !important; 
+      border: solid red 1px;  
+    }
+    .infoWindow {
+      overflow: hidden !important;
+      border: solid red 1px;
+    }
+    
+  ion-slides{
+    background: white;
+  }
+    
+  
+  ion-card-header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  ion-card-content{
+    margin: 5px;
+  }
+  .bullet {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    background-color: grey;
+    border-radius: 50%;
+  }
+  .footer{
+    color:white
+  }
+  
+  .benefits{
+    background-color: #F3F7F5;margin:15px;box-shadow: none;
+  }
+  .spaces{
+    height: 200px;
+  }
+  
+  ion-slide {
+    img{
+      opacity: 0.3;
+    }
+    ion-label{
+      opacity: 0.3;
+    }
+  }
+  ion-row{
+    img{
+      opacity: 0.3;
+    }
+    ion-label{
+      opacity: 0.3;
+    }
+  }
+  ion-row{
+    img{
+      opacity: 1;
+    }
+    ion-label{
+      opacity: 1;
+    }
+    
+  }
+  
+  .image-desc{
+    font-size: 13px;
+    text-align: center;
+    font-weight: 500;
+    white-space: pre-line;
+    margin: 0;color: black;
+    height: 80px;
+  }
+  .slide{
+    outline: none;
+    img{
+      opacity: 0.3;
+    }
+  }
+  div.selectedSlide{
+    img{
+      opacity: 1;
+    }
+  
+  }
+  .benefits-content{
+    color: black;
+    font-size: 13px;
+  }
+  //galaxy III
+  @media(min-width:360px) and (max-width:400px){
+    
+    .slide{
+      outline: none;
+      img{
+        opacity: 0.3;
+        height: 148px;
+        width: 255px;
+      }
+      ion-label{
+        font-size: 14px;
+      }
+      }
+    div.selectedSlide{
+      img{
+        opacity: 1;
+      }
+    
+    }
+    .slick-list{
+      margin: 0 -50px !important;
+    }
+  }
+  
+  //iphone 6
+  @media(min-width:411px) and (max-width:720px){
+    .slide{
+  
+      img{
+        width: 305px;
+         height: 178px;     
+      }
+      ion-label{
+        font-size: 14px;
+      }
+      }
+  
+  
+  
+  }
+  //mobile 5
+  @media(min-width:720px) and (max-width:768px){
+    .image-desc{
+      font-size: 20px;
+    }
+    .slide{
+  
+      img{
+        width:610px;
+        height: 353px;      
+      }
+      ion-label{
+        font-size: 20px;
+      }
+      }
+  
+  }
+  //ipad
+  @media(min-width:768px) and (max-width:1000px){
+    .image-desc{
+      font-size: 20px;
+    }
+    .slide{
+  
+      img{
+        width:650px;
+        height: 376px;      
+      }
+      ion-label{
+        font-size: 20px;
+      }
+      }
+  
+  }
+  
+  

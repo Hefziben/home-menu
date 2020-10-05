@@ -1,0 +1,27 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <ion-menu side="end" menu="first" contentId="main-content" type="overlay">
+      <ion-content style="--background: white;">
+        <ion-row style="display: flex;flex-direction: column;justify-content: space-between;height: 100vh;">
+          <ion-list style="background: white;" id="inbox-list">
+            <ion-row style="display: flex;justify-content: center;margin-bottom: 20px;">
+              <img style="width: 172px;object-fit: contain;" src="../assets/images/logo.png" >
+            </ion-row>
+            <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+              <ion-item  color="secondary" *ngIf="selectedIndex == i && i != 2" (click)="goToPage(p.url,i)" routerDirection="root"  lines="none" detail="false" >
+                <ion-label style="text-align: end;margin: 10px;" color="dark">{{ p.title }}</ion-label>´
+                <img style="object-fit: contain;height: 25px;width: 25px;" src={{p.icon}} >
+              </ion-item>
+              <ion-item color="light"  *ngIf="selectedIndex !== i && i != 2" (click)="goToPage(p.url,i)" routerDirection="root"  lines="none" detail="false" >
+                <ion-label style="text-align: end;margin: 10px;" color="dark">{{ p.title }}</ion-label>´
+                <img style="object-fit: contain;height: 25px;width: 25px;" src={{p.icon}} >
+              </ion-item>
+            </ion-menu-toggle>
+          </ion-list>
+          </ion-row>
+
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

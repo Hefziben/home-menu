@@ -1,0 +1,147 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar
+    style="
+      --background: white;
+      --padding-top: 0px !important;
+      --padding-start: 0px !important;
+      --padding-right: 0px !important;
+      --padding-end: 0px !important;
+    "
+  > <div style="display: flex;margin: 35px 35px 0 20px;justify-content: flex-end;">
+    <ion-buttons slot="end">
+      <ion-back-button style="height: 0; --color: black" text="" icon="arrow-forward">
+      </ion-back-button>
+    </ion-buttons>
+  </div>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: white">
+  <ion-card
+    style="
+      box-shadow: none;
+      background: white;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    "
+  >
+    <img
+      style="object-fit: contain; height: 85px"
+      src="../../assets/images/logo.png"
+    />
+    <ion-item
+      style="--background: white; border: none; margin: 0; width: 350px"
+      lines="none"
+    >
+      <ion-label
+        style="
+          /* font-size: 12px;
+          text-align: center; */
+          white-space: normal;
+          color: black;
+          margin: 15px;
+        "
+        >Ready for Hoodwork? Fill in your info below and we'll connect you with
+        one of our representatives.</ion-label
+      >
+    </ion-item>
+  </ion-card>
+  <form
+    style="margin-top: 0px"
+    [formGroup]="signupForm"
+    #form="ngForm"
+    (ngSubmit)="register(form)"
+  >
+    <ion-grid>
+      <ion-row color="primary" justify-content-center>
+        <ion-col align-self-center size-md="12" size-lg="12" size-xs="12">
+          <div padding>
+            <ion-item>
+              <ion-label>I am a ...</ion-label>
+              <ion-select
+              (ionChange)="changeType($event)"
+                interface="popover"
+                value="{{occupation}}"
+                style="--padding-start: 0; min-width: 100%;font-size: 18px;"
+              >
+                <ion-select-option value="Professional"
+                  >Professional</ion-select-option
+                >
+                <ion-select-option value="Employer"
+                  >Employer</ion-select-option
+                >
+                <ion-select-option value="Landlord"
+                  >Landlord</ion-select-option
+                >
+                <ion-select-option value="Developer"
+                  >Developer</ion-select-option
+                >
+              </ion-select>
+              
+            </ion-item>
+            <ion-item class="input">
+              <ion-input
+                name="name"
+                type="text"
+                formControlName="name"
+                placeholder="Full name*"
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-item class="input">
+              <ion-input
+                name="user"
+                type="tel"
+                formControlName="phone"
+                placeholder="Phone number*"
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-item class="input">
+              <ion-input
+                name="user"
+                type="email"
+                formControlName="email"
+                placeholder="Email (optional)"
+              ></ion-input>
+            </ion-item>
+            <ion-item class="input">
+              <ion-input
+                type="text"
+                formControlName="company"
+                placeholder="Company (optional)"
+              ></ion-input>
+            </ion-item>
+          </div>
+          <ion-row
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+            "
+            padding
+          >
+            <ion-button
+              style="--border-radius: 0"
+              color="success"
+              shape="round"
+              type="submit"
+              [disabled]="form.invalid"
+              expand="block"
+              >Get in touch</ion-button
+            >
+            <p style="margin: 5px 20px; text-align: center; font-size: 12px">
+              By clicking the above button you agree to our Terms of Service and
+              have read and understood our Privacy Policy
+            </p>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

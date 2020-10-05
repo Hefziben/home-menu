@@ -1,0 +1,35 @@
+ion-item{
+    --background: white;
+    --color: var(--ion-color-dark);
+    margin: 0 15px 15px;
+    //border-radius: 4px;
+    font-size: 15px;
+    //border-bottom: solid 1px grey;
+  }
+  
+    
+  ion-input{
+    --placeholder-font-style:italic;
+    --placeholder-color:lightslategrey;
+    color: black;
+    font-size: 18px;
+    
+  }
+
+  ion-header {
+    &.header-md:after {
+      background: none;
+    }
+  }
+  .input{
+    //border-radius: 8px;
+  }
+  ion-button{
+    width: 300px;
+    height: 55px;
+    font-weight: 600;
+  }
+// ion-label{
+//   font-size: 12px;
+// }
+  
